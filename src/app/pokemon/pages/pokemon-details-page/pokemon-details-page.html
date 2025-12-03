@@ -1,0 +1,125 @@
+<section class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+
+  <!-- Spinner -->
+  @if (!personaje()) {
+    <div class="flex justify-center items-center h-64">
+      <div class="relative">
+        <span class="loading loading-spinner loading-lg text-indigo-600"></span>
+        <p class="text-center mt-4 text-gray-600 font-medium">Cargando Pokémon...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Detalle Pokémon -->
+  @if (personaje()) {
+
+    <div class="card bg-white shadow-2xl rounded-2xl overflow-hidden max-w-5xl mx-auto transform hover:scale-[1.01] transition-transform duration-300">
+
+      <!-- Header con gradiente y imagen -->
+      <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-8 relative">
+        <figure class="flex justify-center">
+          <div class="bg-white rounded-full p-6 shadow-xl">
+            <img
+              [src]="personaje()?.sprites?.front_default"
+              [alt]="personaje()?.name"
+              class="w-48 h-48 drop-shadow-2xl"
+            />
+          </div>
+        </figure>
+      </div>
+
+      <div class="card-body p-8">
+
+        <!-- Nombre -->
+        <h2 class="text-4xl font-extrabold capitalize text-center mb-6 text-gray-800">
+          {{ personaje()?.name }}
+        </h2>
+
+        <!-- Tipo(s) -->
+        <div class="flex gap-3 mb-6 justify-center flex-wrap">
+          @for (tipo of personaje()?.types ?? []; track tipo.slot) {
+            <span class="badge badge-lg bg-indigo-600 text-white capitalize font-semibold px-4 py-3 rounded-full shadow-md hover:bg-indigo-700 transition-colors">
+              {{ tipo.type.name }}
+            </span>
+          }
+        </div>
+
+        <!-- Info general en grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl shadow-sm border border-blue-200">
+            <p class="text-sm text-blue-600 font-medium">Experiencia Base</p>
+            <p class="text-2xl font-bold text-blue-900">{{ personaje()?.base_experience }}</p>
+          </div>
+          
+          <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl shadow-sm border border-green-200">
+            <p class="text-sm text-green-600 font-medium">Altura</p>
+            <p class="text-2xl font-bold text-green-900">{{ personaje()?.height }} <span class="text-base">dm</span></p>
+          </div>
+          
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl shadow-sm border border-purple-200">
+            <p class="text-sm text-purple-600 font-medium">Peso</p>
+            <p class="text-2xl font-bold text-purple-900">{{ personaje()?.weight }} <span class="text-base">hg</span></p>
+          </div>
+        </div>
+
+        <!-- Habilidades -->
+        <div class="mb-8 bg-gray-50 p-6 rounded-xl shadow-sm">
+          <h3 class="font-bold text-2xl mb-4 text-gray-800 flex items-center gap-2">
+            <span class="text-yellow-500">⚡</span>
+            Habilidades
+          </h3>
+          <div class="flex flex-wrap gap-3">
+            @for (hab of personaje()?.abilities ?? []; track hab.slot) {
+              <span class="bg-white px-4 py-2 rounded-lg capitalize font-medium text-gray-700 shadow-sm border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all">
+                {{ hab.ability?.name }}
+                @if (hab.is_hidden) {
+                  <span class="text-xs text-purple-600 ml-1">(oculta)</span>
+                }
+              </span>
+            }
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="mb-8 bg-gray-50 p-6 rounded-xl shadow-sm">
+          <h3 class="font-bold text-2xl mb-4 text-gray-800 flex items-center gap-2">
+            <span class="text-red-500">📊</span>
+            Estadísticas
+          </h3>
+          <div class="space-y-3">
+            @for (stat of personaje()?.stats ?? []; track stat.stat.name) {
+              <div class="flex items-center gap-4">
+                <span class="capitalize font-medium text-gray-700 w-36">{{ stat.stat.name }}:</span>
+                <div class="flex-1 bg-gray-200 rounded-full h-6 overflow-hidden">
+                  <div 
+                    class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full flex items-center justify-end pr-3 transition-all duration-500"
+                    [style.width.%]="(stat.base_stat / 255) * 100">
+                    <span class="text-white text-xs font-bold">{{ stat.base_stat }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Movimientos -->
+        <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
+          <h3 class="font-bold text-2xl mb-4 text-gray-800 flex items-center gap-2">
+            <span class="text-blue-500">🎯</span>
+            Movimientos
+            <span class="text-sm font-normal text-gray-500">(primeros 6)</span>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            @for (mov of personaje()?.moves?.slice(0, 6) ?? []; track mov.move.name) {
+              <div class="bg-white px-4 py-3 rounded-lg capitalize font-medium text-gray-700 shadow-sm border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all">
+                {{ mov.move.name }}
+              </div>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  }
+</section>

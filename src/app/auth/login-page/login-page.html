@@ -1,0 +1,64 @@
+<section class="min-h-screen flex items-center justify-center bg-gray-900">
+
+
+  <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+    
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-extrabold text-gray-800 tracking-wide">
+        Iniciar Sesión
+      </h1>
+    </header>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+
+      <!-- Email -->
+      <div class="mb-5">
+        <label class="block mb-1 font-semibold text-gray-700">Email</label>
+        <input 
+  formControlName="email"
+  type="email"
+  class="w-full bg-transparent border-b border-gray-400 focus:border-blue-500
+         outline-none py-2 transition-all text-gray-300 placeholder-gray-500"
+  placeholder="usuario@ups.edu.ec">
+
+
+        @if(submitted() && loginForm.controls.email.invalid) {
+          <p class="text-red-600 text-sm mt-1">Ingresa un email válido</p>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="mb-5">
+        <label class="block mb-1 font-semibold text-gray-700">Contraseña</label>
+        <input 
+  formControlName="password"
+  type="password"
+  class="w-full bg-transparent border-b border-gray-400 focus:border-blue-500
+         outline-none py-2 transition-all text-gray-300 placeholder-gray-500"
+  placeholder="•••••••">
+
+
+        @if(submitted() && loginForm.controls.password.invalid) {
+          <p class="text-red-600 text-sm mt-1">Mínimo 6 caracteres</p>
+        }
+      </div>
+
+      <!-- Error general -->
+      @if(submitted() && errorMessage()) {
+        <div class="text-red-600 text-sm mb-4 font-medium">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Botón -->
+      <button 
+        type="submit" 
+        class="btn btn-primary w-full text-white font-semibold tracking-wide">
+        Ingresar
+      </button>
+
+    </form>
+
+  </div>
+
+</section>

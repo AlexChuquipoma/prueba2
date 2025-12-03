@@ -1,0 +1,102 @@
+<section class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-10">
+  
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Header mejorado -->
+    <div class="text-center mb-12">
+      <div class="inline-block mb-4">
+        <h1 class="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          Pokémon API
+        </h1>
+      </div>
+      <h2 class="text-xl text-gray-600 font-medium">
+        Explora el mundo Pokémon
+      </h2>
+      
+      <!-- Contador de Pokémon -->
+      @if (pokemonResource()) {
+        <div class="mt-4 inline-block bg-white px-6 py-2 rounded-full shadow-md border border-gray-200">
+          <span class="text-gray-600">Total de Pokémon:</span>
+          <span class="font-bold text-indigo-600 ml-2">{{ pokemonCount() }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Spinner -->
+    @if (!pokemonResource()) {
+      <div class="flex flex-col justify-center items-center h-64">
+        <span class="loading loading-spinner text-indigo-600 loading-lg"></span>
+        <p class="mt-4 text-gray-600 font-medium">Cargando Pokémon...</p>
+      </div>
+    }
+
+    <!-- Paginación superior -->
+    @if (pokemonResource()) {
+      <div class="flex items-center justify-center mb-8">
+        <app-pagination
+          [pages]="pokemonResource()?.pages ?? 0"
+          [currentPage]="paginationService.currentPage()"
+        ></app-pagination>
+      </div>
+    }
+
+    <!-- Grid de Cards (alternativa moderna a tabla) -->
+    @if (pokemonResource()) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        @for (poke of pokemonResource()?.results ?? []; track poke.name) {
+          
+          <div class="card bg-white shadow-lg hover:shadow-2xl rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-300 border border-gray-100">
+            
+            <!-- Header del card con ID -->
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-500 p-3 flex justify-between items-center">
+              <span class="text-white font-bold text-sm">
+                #{{ getIdFromUrl(poke.url).toString().padStart(3, '0') }}
+              </span>
+              <span class="badge badge-sm bg-white text-indigo-600 font-semibold">
+                Pokémon
+              </span>
+            </div>
+            
+            <!-- Imagen -->
+            <figure class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 flex justify-center items-center h-40">
+              <img
+                [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getIdFromUrl(poke.url) + '.png'"
+                class="w-28 h-28 drop-shadow-xl hover:scale-110 transition-transform duration-300"
+                [alt]="poke.name"
+              />
+            </figure>
+            
+            <!-- Nombre y acción -->
+            <div class="card-body p-4">
+              <h3 class="card-title text-xl capitalize font-bold text-gray-800 mb-3">
+                {{ poke.name }}
+              </h3>
+              
+              <a 
+                [routerLink]="['/pokemon', getIdFromUrl(poke.url)]" 
+                class="btn btn-primary w-full rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all"
+              >
+                Ver Detalle
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+            
+          </div>
+          
+        }
+      </div>
+
+      <!-- Paginación inferior -->
+      <div class="flex items-center justify-center mt-8">
+        <app-pagination
+          [pages]="pokemonResource()?.pages ?? 0"
+          [currentPage]="paginationService.currentPage()"
+        ></app-pagination>
+      </div>
+    }
+
+  </div>
+
+</section>

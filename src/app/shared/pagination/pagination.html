@@ -1,0 +1,47 @@
+<div class="flex justify-center items-center gap-2 mt-4">
+
+  <!-- Botón anterior -->
+  <button
+    (click)="previousPage()"
+    [routerLink]="[]"
+    [queryParams]="{ page: activePage() - 1 }"
+    [disabled]="activePage() === 1"
+    class="btn btn-outline btn-primary px-4 py-2 rounded-lg shadow-sm hover:shadow-md
+           disabled:opacity-40 disabled:hover:shadow-none"
+  >
+    ← Anterior
+  </button>
+
+  <!-- Páginas -->
+  <div class="flex gap-1">
+    @for (page of getPagesList(); track page) {
+      <button
+        class="px-4 py-2 rounded-lg font-semibold transition-all duration-150
+          hover:shadow-md hover:bg-primary/20"
+        
+        [class.bg-primary]="page === activePage()"
+        [class.text-white]="page === activePage()"
+        [class.shadow-lg]="page === activePage()"
+
+        [routerLink]="[]"
+        [queryParams]="{ page: page }"
+        (click)="activePage.set(page)"
+      >
+        {{ page }}
+      </button>
+    }
+  </div>
+
+  <!-- Botón siguiente -->
+  <button
+    (click)="nextPage()"
+    [routerLink]="[]"
+    [queryParams]="{ page: activePage() + 1 }"
+    [disabled]="activePage() === pages()"
+    class="btn btn-outline btn-primary px-4 py-2 rounded-lg shadow-sm hover:shadow-md
+           disabled:opacity-40 disabled:hover:shadow-none"
+  >
+    Siguiente →
+  </button>
+
+</div>
